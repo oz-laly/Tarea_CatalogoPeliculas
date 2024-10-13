@@ -1,4 +1,4 @@
-const apiKey = 'YOUR API KEY'; // Reemplaza con tu clave API
+const apiKey = 'fae42405211ad66631bf31a7e11da3d7';
 const apiUrl = 'https://api.themoviedb.org/3';
 const movieList = document.getElementById('movies');
 const movieDetails = document.getElementById('movie-details');
@@ -13,7 +13,7 @@ let favoriteMovies = JSON.parse(localStorage.getItem('favorites')) || [];
 // Fetch and display popular movies
 async function fetchPopularMovies() {
     try {
-        const response= await fetch();
+        const response= await fetch(`${apiUrl}/movie/popular?api_key=${apiKey}`);
         const movies= await response.json();
         displayMovies(movies.results);
         // tu codigo aqui: realiza una solicitud para obtener las películas populares
@@ -40,11 +40,11 @@ function displayMovies(movies) {
 // Show movie details
 async function showMovieDetails(movieId) {
     try {
-        const response = await fetch();
+        const response = await fetch(`${apiUrl}/movie/${movieId}?api_key=${apiKey}`);
         const details = await response.json();
         detailsContainer.innerHTML = `
         <h2>${details.title}</h2>
-        <img src="https://image.tmdb.org/t/p/w500${Bmovie.poster_path}" alt="${movie.title}">
+        <img src="https://image.tmdb.org/t/p/w500${details.poster_path}" alt="${details.title}">
         <p>${details.overview}</p>
         <p>Fecha de lanzamiento: ${details.release_date}</p>`;
         movieDetails.classList.remove('hidden');
@@ -61,7 +61,7 @@ searchButton.addEventListener('click', async () => {
     const query = searchInput.value;
     if (query) {
         try {
-            const response = await fetch();
+            const response = await fetch(`${apiUrl}/search/movie?api_key=${apiKey}&query=${query}`);
             const results = await response.json();
             displayMovies(results.results);
             // tu codigo aqui: realiza una solicitud para buscar películas
@@ -77,7 +77,7 @@ addToFavoritesButton.addEventListener('click', () => {
     if (selectedMovieId) {
         const favoriteMovie = {
             id: selectedMovieId,
-            title: document.querySelector('#details h3').textContent
+            title: document.querySelector('#details h2').textContent
         };
         if (!favoriteMovies.some(movie => movie.id === selectedMovieId)) {
             favoriteMovies.push(favoriteMovie);
